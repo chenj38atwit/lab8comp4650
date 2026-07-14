@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Student Performance Management System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">Student Performance Management System</div>
+    <nav>
+      <a href="index.html" class="active">Dashboard</a>
+      <a href="students.html">Student Records</a>
+      <a href="add.html">Add Student</a>
+      <a href="reports.html">Reports</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Class Dashboard</h1>
+      <p>Overview of class performance, updated live as records change.</p>
+    </div>
+
+    <div id="alertContainer"></div>
+
+    <section class="stat-grid" id="statGrid">
+      <div class="stat-card">
+        <div class="stat-label">Total Students</div>
+        <div class="stat-value" id="statTotalStudents">&ndash;</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Average Marks</div>
+        <div class="stat-value" id="statAverageMarks">&ndash;</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Marks</div>
+        <div class="stat-value" id="statTotalMarks">&ndash;</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Passing</div>
+        <div class="stat-value" id="statPassing">&ndash;</div>
+        <div class="stat-sub" id="statPassingPct">&nbsp;</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Failing</div>
+        <div class="stat-value" id="statFailing">&ndash;</div>
+        <div class="stat-sub" id="statFailingPct">&nbsp;</div>
+      </div>
+    </section>
+
+    <div class="card" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+      <div>
+        <h2 style="margin-top:0; font-size:1.05rem;">Top / Bottom Performer</h2>
+        <p><strong>Highest:</strong> <span id="statHighest">&ndash;</span></p>
+        <p><strong>Lowest:</strong> <span id="statLowest">&ndash;</span></p>
+      </div>
+      <div>
+        <h2 style="margin-top:0; font-size:1.05rem;">Grade Distribution</h2>
+        <div id="gradeDistribution"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex-between">
+        <h2 style="margin:0; font-size:1.05rem;">Quick Navigation</h2>
+      </div>
+      <div class="form-actions" style="margin-top:1rem;">
+        <a class="btn btn-primary" href="add.html">+ Add Student</a>
+        <a class="btn btn-secondary" href="students.html">View All Records</a>
+        <a class="btn btn-secondary" href="reports.html">Generate Report</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/grading.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

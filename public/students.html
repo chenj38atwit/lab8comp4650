@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Records | Student Performance Management System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">Student Performance Management System</div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="students.html" class="active">Student Records</a>
+      <a href="add.html">Add Student</a>
+      <a href="reports.html">Reports</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Student Records</h1>
+      <p>Search, filter, sort, update, and delete student performance records.</p>
+    </div>
+
+    <div id="alertContainer"></div>
+
+    <div class="card">
+      <div class="table-toolbar">
+        <div class="form-group">
+          <label for="searchInput">Search by name</label>
+          <input type="text" id="searchInput" placeholder="e.g. Maria" />
+        </div>
+        <div class="form-group">
+          <label for="filterMajor">Major</label>
+          <select id="filterMajor"><option value="">All majors</option></select>
+        </div>
+        <div class="form-group">
+          <label for="filterCourse">Course</label>
+          <select id="filterCourse"><option value="">All courses</option></select>
+        </div>
+        <div class="form-group">
+          <label for="filterGrade">Grade</label>
+          <select id="filterGrade">
+            <option value="">All grades</option>
+            <option>A</option><option>A-</option><option>B+</option><option>B</option><option>B-</option>
+            <option>C+</option><option>C</option><option>C-</option><option>D+</option><option>D</option><option>F</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="filterStatus">Status</label>
+          <select id="filterStatus">
+            <option value="">All statuses</option>
+            <option value="Pass">Pass</option>
+            <option value="Fail">Fail</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-secondary" id="clearFiltersBtn" type="button">Clear Filters</button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th data-sort="name">Name</th>
+              <th data-sort="major">Major</th>
+              <th data-sort="course">Course</th>
+              <th data-sort="marks">Marks</th>
+              <th data-sort="letterGrade">Grade</th>
+              <th>Meaning</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="studentTableBody">
+            <tr class="empty-row"><td colspan="8">Loading records&hellip;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Edit modal -->
+  <div class="modal-overlay hidden" id="editModalOverlay">
+    <div class="modal">
+      <h2>Edit Student Record</h2>
+      <form id="editForm">
+        <input type="hidden" id="editId" />
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="editName">Full Name</label>
+            <input type="text" id="editName" required />
+            <div class="field-error" id="editNameError"></div>
+          </div>
+          <div class="form-group">
+            <label for="editMajor">Major</label>
+            <select id="editMajor" required></select>
+            <div class="field-error" id="editMajorError"></div>
+          </div>
+          <div class="form-group">
+            <label for="editCourse">Course</label>
+            <select id="editCourse" required></select>
+            <div class="field-error" id="editCourseError"></div>
+          </div>
+          <div class="form-group full">
+            <label for="editMarks">Marks (0&ndash;100)</label>
+            <input type="number" id="editMarks" min="0" max="100" step="0.01" required />
+            <div class="field-error" id="editMarksError"></div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="editCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete confirmation modal -->
+  <div class="modal-overlay hidden" id="deleteModalOverlay">
+    <div class="modal">
+      <h2>Delete Student Record</h2>
+      <p>Are you sure you want to delete <strong id="deleteStudentName"></strong>'s record? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="deleteCancelBtn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="deleteConfirmBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/grading.js"></script>
+  <script src="js/students.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports | Student Performance Management System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">Student Performance Management System</div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="students.html">Student Records</a>
+      <a href="add.html">Add Student</a>
+      <a href="reports.html" class="active">Reports</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <h1>Performance Reports</h1>
+      <p>Generate a downloadable PDF report covering every student record and class-level statistics.</p>
+    </div>
+
+    <div id="alertContainer"></div>
+
+    <div class="card">
+      <h2 style="margin-top:0; font-size:1.05rem;">Report Contents</h2>
+      <p class="text-muted">The generated PDF includes the report title, generation date, every student's name, major, course, marks, letter grade, performance meaning, and pass/fail status, followed by class-wide statistics (totals, average, top/bottom performer, pass/fail counts, and grade distribution).</p>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="downloadPdfBtn">Download PDF Report</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-top:0; font-size:1.05rem;">Current Snapshot</h2>
+      <div class="stat-grid" id="reportStatGrid">
+        <div class="stat-card">
+          <div class="stat-label">Total Students</div>
+          <div class="stat-value" id="rTotalStudents">&ndash;</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Average Marks</div>
+          <div class="stat-value" id="rAverageMarks">&ndash;</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Passing</div>
+          <div class="stat-value" id="rPassing">&ndash;</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Failing</div>
+          <div class="stat-value" id="rFailing">&ndash;</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/reports.js"></script>
+</body>
+</html>
