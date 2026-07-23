@@ -1,16 +1,72 @@
 # Student Performance Management System
 
-A full-stack academic records dashboard built with HTML, CSS, JavaScript, Node.js, Express, and MongoDB. It stores student records, calculates letter grades using the university's undergraduate grading scale, and reports class-level statistics.
+## Description
 
-## Features
+A full-stack academic records dashboard for managing student performance. It stores student records in MongoDB, automatically computes letter grades and pass/fail status from marks using the university's undergraduate grading scale, and reports class-level statistics through a browser dashboard, a searchable/sortable records table, and a downloadable PDF report.
 
-- **Dashboard** — total students, total/average marks, pass/fail counts, highest/lowest performer, grade distribution.
-- **Student Records** — searchable, filterable (major, course, grade, pass/fail), sortable table with edit and delete (with confirmation).
-- **Add Student** — form with dynamic course lists per major, live grade preview, client + server validation.
-- **Reports** — downloadable PDF report with every record and class statistics.
-- Grades, performance meaning, color label, and pass/fail status are always computed server-side from marks, so they can never drift out of sync.
+## Technologies Used
 
-## Grading Scale
+- **Frontend:** HTML, CSS, vanilla JavaScript
+- **Backend:** Node.js, Express
+- **Database:** MongoDB with Mongoose (ODM)
+- **Other libraries:** `cors`, `dotenv`, `pdfkit` (PDF report generation), `nodemon` (dev auto-reload)
+
+## Installation Instructions
+
+1. Clone the repository and move into the project directory.
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Copy the example environment file and adjust values if needed:
+   ```
+   cp .env.example .env
+   ```
+   This sets `PORT` (defaults to `5000`) and `MONGODB_URI` (defaults to a local MongoDB instance).
+4. Seed the example majors and courses (required before adding students, since the Add Student form loads majors/courses from the database):
+   ```
+   npm run seed
+   ```
+
+## How to Run the Backend Server
+
+- Start the server normally:
+  ```
+  npm start
+  ```
+- Start with auto-reload during development:
+  ```
+  npm run dev
+  ```
+- Once running, open `http://localhost:5000` (or the port set in `.env`) in your browser. The Express server also serves the static frontend from the `public/` folder.
+
+## How to Connect to MongoDB
+
+1. Make sure a MongoDB instance is available — either running locally or hosted on MongoDB Atlas.
+2. Set `MONGODB_URI` in your `.env` file to the connection string:
+   - Local example: `mongodb://127.0.0.1:27017/student_performance_db`
+   - Atlas example: `mongodb+srv://<user>:<password>@<cluster-url>/student_performance_db`
+3. The connection is established in `config/db.js` via Mongoose when the server starts (`server.js`). If the connection fails, the server logs the error and exits rather than starting without a database.
+
+## How to Use the Application
+
+- **Dashboard** (`/index.html`): View live class-wide statistics — total students, total/average marks, pass/fail counts and percentages, the highest/lowest performer, and the grade distribution.
+- **Add Student** (`/add.html`): Fill in a student's name, major, and course (course list updates based on the selected major), and marks. A live grade preview shows the resulting letter grade before submitting.
+- **Student Records** (`/students.html`): Search by name and filter by major, course, grade, or pass/fail status. Click column headers to sort. Edit or delete existing records directly from the table (delete requires confirmation).
+- **Reports** (`/reports.html`): Download a PDF report containing every student record along with class statistics.
+
+## Main Features Implemented
+
+- Dashboard with live class statistics and grade distribution.
+- Full CRUD for student records (create, read, update, delete) via a REST API and matching UI.
+- Server-side grade computation: letter grade, performance meaning, color label, and pass/fail status are always derived from marks so they can never drift out of sync with the underlying data.
+- Search, filter (by major, course, grade, pass/fail), and sort on the Student Records page.
+- Bulk import endpoint (`POST /api/students/import/bulk`) that validates each row independently and reports per-row success/failure.
+- Downloadable PDF class report.
+- Client- and server-side validation, with duplicate (name + major + course) records rejected.
+- Majors and their course lists are stored in the database and seeded via `seed/seedMajors.js`, so new programs can be added without code changes.
+
+### Grading Scale
 
 | Marks | Grade | Meaning | Color |
 |---|---|---|---|
@@ -28,45 +84,7 @@ A full-stack academic records dashboard built with HTML, CSS, JavaScript, Node.j
 
 Pass = marks ≥ 60, Fail = marks < 60.
 
-## Project Structure
-
-```
-├── server.js               # Express app entry point
-├── config/db.js            # MongoDB connection
-├── models/                 # Mongoose schemas (Student, Major)
-├── middleware/              # Request validation
-├── routes/                  # REST API: students, majors, stats, reports
-├── utils/grading.js         # Single source of truth for grade calculation
-├── seed/seedMajors.js       # Seeds example majors/courses
-└── public/                  # Frontend (HTML, CSS, vanilla JS)
-```
-
-## Setup
-
-1. Install dependencies:
-   ```
-   npm install
-   ```
-2. Copy `.env.example` to `.env` and set `MONGODB_URI` (defaults to a local MongoDB instance):
-   ```
-   cp .env.example .env
-   ```
-3. Make sure MongoDB is running locally (or point `MONGODB_URI` at an Atlas cluster).
-4. Seed the example majors and courses:
-   ```
-   npm run seed
-   ```
-5. Start the server:
-   ```
-   npm start
-   ```
-   or, for auto-reload during development:
-   ```
-   npm run dev
-   ```
-6. Open `http://localhost:5000` in your browser.
-
-## API Overview
+### API Overview
 
 | Method | Route | Description |
 |---|---|---|
@@ -80,14 +98,10 @@ Pass = marks ≥ 60, Fail = marks < 60.
 | GET | `/api/stats` | Class-level statistics |
 | GET | `/api/reports/pdf` | Download the PDF performance report |
 
-## Validation
+## Known Issues or Limitations
 
-- Name: required, letters/spaces/hyphens/apostrophes only.
-- Major and course: required, and the course must belong to the selected major.
-- Marks: required, numeric, 0–100.
-- Duplicate (name + major + course) records are rejected with a clear error.
-- All rules are enforced on both the frontend (instant feedback) and the backend (source of truth).
-
-## Adding Majors/Courses
-
-Majors and their course lists live in the `majors` collection (seeded by `seed/seedMajors.js`). Edit that file and re-run `npm run seed` to add new programs — the Add Student and edit forms pick up new majors/courses automatically via `GET /api/majors`.
+- No authentication or authorization — anyone with access to the server can view, add, edit, or delete records.
+- The bulk import endpoint (`POST /api/students/import/bulk`) exists on the backend, but there is no corresponding file-upload UI in the frontend yet; it must be called directly (e.g. via a script or API client).
+- Majors and courses can only be added or changed by editing `seed/seedMajors.js` and re-running `npm run seed` — there is no admin UI for managing them.
+- No automated test suite is included.
+- The app assumes a single class/dataset; there is no multi-class, multi-term, or multi-user separation of records.
