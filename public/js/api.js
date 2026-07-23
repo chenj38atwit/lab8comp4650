@@ -30,6 +30,7 @@ const Api = {
     return apiRequest(`/students${suffix}`);
   },
   createStudent: (data) => apiRequest('/students', { method: 'POST', body: JSON.stringify(data) }),
+  importStudents: (records) => apiRequest('/students/import/bulk', { method: 'POST', body: JSON.stringify({ records }) }),
   updateStudent: (id, data) => apiRequest(`/students/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteStudent: (id) => apiRequest(`/students/${id}`, { method: 'DELETE' }),
 };
